@@ -1,10 +1,10 @@
 .SUFFIXES: .cpp .o
 
-CXX=g++ -O3
+CXX=g++
 SRC = $(wildcard *.cpp)
 OBJ = $(SRC:.cpp=.o)
 TARGET = $(SRC:.cpp=)
-CPPFLAGS=-g 
+CPPFLAGS=-g -O3
 
 test: $(TARGET)
 	./$(TARGET)

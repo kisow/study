@@ -6,7 +6,7 @@
  * -g -ocache-parallel cache-parallel.c
  */
 
-#define _GNU_SOURCE
+//#define _GNU_SOURCE
 
 #include <stdio.h>
 #include <stdlib.h>

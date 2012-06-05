@@ -2,6 +2,8 @@
 # 설정
 ##########################################
 
+CXX			= g++
+CXXFLAGS	= -g
 SRCS		= $(wildcard *.c) $(wildcard *.cpp) 
 TARGET_A	= cache_line_bouncing
 TARGET_B	= cache_line_no_bouncing
@@ -17,13 +19,13 @@ all: clean ${TARGET_A} ${TARGET_B}
 	time ./${TARGET_B} > ${TARGET_B}.out
 
 ${TARGET_A}:
-	gcc -DCACHELINE_SIZE=`getconf LEVEL1_DCACHE_LINESIZE` -lpthread -Wall \
-		-O2 -g -o $@ ${SRCS}
+	$(CXX) -DCACHELINE_SIZE=`getconf LEVEL1_DCACHE_LINESIZE` \
+		$(CXXFLAGS) -o $@ ${SRCS} -Wall -lpthread
 
 ${TARGET_B}:
-	gcc -DCACHELINE_SIZE=`getconf LEVEL1_DCACHE_LINESIZE` -lpthread -Wall \
+	$(CXX) -DCACHELINE_SIZE=`getconf LEVEL1_DCACHE_LINESIZE` \
 		-DDISTINCT_CACHE_LINES	\
-		-O2 -g -o $@ ${SRCS}
+		$(CXXFLAGS) -o $@ ${SRCS} -Wall -lpthread
 
 clean:
 	rm -f ${TARGET_A} ${TARGET_B} *.out
