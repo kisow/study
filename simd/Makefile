@@ -1,19 +1,19 @@
 .SUFFIXES: .cpp .o
 
 CXX=g++
-SRC = $(wildcard *.cpp)
-OBJ = $(SRC:.cpp=.o)
-TARGET = $(SRC:.cpp=)
-CPPFLAGS=-g -O3 -march=native
+SRCS = $(wildcard *.cpp)
+OBJS = $(SRCS:.cpp=.o)
+TARGETS = $(SRCS:.cpp=)
+CPPFLAGS=-g -O3 
 
-test: clean $(TARGET)
-	./$(TARGET)
+build: clean $(TARGETS)
+	for target in $(TARGETS); do \
+		echo "=== run $$target ==="; \
+		./$$target;	\
+	done
 
-$(TARGET): $(OBJ)
-	$(CXX) $(CPPFLAGS) -o $@ $(OBJ) 
-
-.cpp.o:
-	$(CXX) $(CPPFLAGS) -c $< -o $@
+%.o: %.cpp
+	$(CXX) $(CPPFLAGS) $< -o $@ 
 
 clean:
-	$(RM) $(OBJ) $(TARGET)
+	$(RM) $(OBJS) $(TARGETS)
