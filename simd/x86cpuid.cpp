@@ -3,10 +3,11 @@
 #include "x86simd.hpp"
 
 using namespace std;
+using namespace x86simd;
 
 int main()
 {
-	X86Cpuid x;
+	Cpuid x;
 
 	cout.setf(ios_base::boolalpha);
 	cout << "vendor : " << x.getVendorString() << endl;

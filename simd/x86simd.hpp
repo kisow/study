@@ -4,14 +4,19 @@
 
 // author : kisow@nhn.com
 
-class X86Cpuid 
+#include <stdint.h>
+#include <emmintrin.h>
+
+namespace x86simd {
+
+class Cpuid 
 {
 public:
-	X86Cpuid() : end_(0) {}
+	Cpuid() : end_(0) {}
 
 	bool mmx() { cpuid(1); return flag(dx_, 23); }
 	bool sse() { cpuid(1); return flag(dx_, 25); }
-	bool sse2(){ cpuid(1); return flag(dx_, 26); }
+	bool sse2() { cpuid(1); return flag(dx_, 26); }
 	bool htt() { cpuid(1); return flag(dx_, 28); }
 
 	bool sse3() { cpuid(1); return flag(cx_, 0); }
@@ -42,6 +47,40 @@ public:
 	int		end_;
 };
 
+class M128 
+{
+public:
+	M128() {}
+	M128(const M128& src) : i_(src.i_) {}
+	M128(const __m128i& i) : i_(i) {}
+	M128(const __m128d& d) : d_(d) {}
+	~M128() {}
+
+	const M128& operator=(const M128& src) { i_ = src.i_; return *this; }
+
+	operator __m128i&() { return i_; } 
+	operator const __m128i&() const { return i_; } 
+
+	operator __m128d&() { return d_; } 
+	operator const __m128d&() const { return d_; } 
+
+	template <typename Type>
+	const Type* cbegin() const { return reinterpret_cast<const Type*>(&i_); }
+	template <typename Type>
+	Type* begin() { return const_cast<Type*>(cbegin<Type>()); }
+
+	template <typename Type>
+	const Type* cend() const { return cbegin<Type>() + (sizeof(i_) / sizeof(Type)); }
+	template <typename Type>
+	Type* end() { return const_cast<Type*>(cend<Type>()); }
+
+private:
+	union {
+		__m128i		i_;
+		__m128d		d_;
+	};
+};
+
 template <typename Type>
 Type pshufb(Type buf, Type mask)
 {
@@ -49,5 +88,10 @@ Type pshufb(Type buf, Type mask)
 
 	return buf;
 }
+
+template <>
+M128 pshufb(M128 buf, M128 mask) { return pshufb<__m128i>(buf, mask); }
+
+}; // end of namespace x86simd
 
 #endif // end of include guard: __X86SIMD_HPP__ 
