@@ -6,6 +6,9 @@
 
 #include <stdint.h>
 #include <emmintrin.h>
+#include <tmmintrin.h>
+#include <algorithm>
+#include <iostream>
 
 namespace x86simd {
 
@@ -82,15 +85,29 @@ private:
 };
 
 template <typename Type>
-Type pshufb(Type buf, Type mask)
+void pshufb(Type& buf, const Type& mask)
 {
+	//buf = _mm_shuffle_epi8(buf, mask);
 	__asm__ __volatile__ ("pshufb %1, %0" : "+x" (buf) : "xm" (mask));
-
-	return buf;
 }
 
 template <>
-M128 pshufb(M128 buf, M128 mask) { return pshufb<__m128i>(buf, mask); }
+inline void pshufb(M128& buf, const M128& mask) 
+{ 
+	pshufb<__m128i>(buf, mask); 
+}
+
+template <typename BufType, typename MaskType>
+inline void pshufb(BufType& buf, const MaskType& mask)
+{
+	pshufb(*((M128*)&buf), *((M128*)&mask));
+}
+
+template <typename BufType, typename MaskType>
+inline void pshufb(BufType* buf, const MaskType* mask)
+{
+	pshufb(*((M128*)buf), *((M128*)mask));
+}
 
 }; // end of namespace x86simd
 
