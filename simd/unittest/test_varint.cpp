@@ -7,6 +7,7 @@
 #include <string>
 #include <bitset>
 #include <iostream>
+#include <boost/type_traits.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/assign/list_of.hpp>
 #include <boost/assign/std/vector.hpp>
@@ -71,7 +72,7 @@ public:
 		typedef G8IU::Entry<INT_SIZE> Entry;
 
 		const Table& table = G8IU::getTable<INT_SIZE>();
-		for(size_t d = 0; d < Table::DESC_MAX; d++) {
+		for(size_t d = 0; d < Table::ENTRY_MAX; d++) {
 			const Entry& entry = table.getEntry(d);
 			const int8_t *seq = (int8_t*)&(entry.shuffleSequence[0]);
 
@@ -96,7 +97,7 @@ public:
 		}
 		out << "-------------------------------------" << endl;
 
-		for(size_t d = 0; d < Table::DESC_MAX; d++) {
+		for(size_t d = 0; d < Table::ENTRY_MAX; d++) {
 			out << bitset<8>(d) << ' ' << Entry::num(d) << '=';
 			for(size_t i = 0; i < Entry::num(d); i++) {
 				if(i > 0) out << '+';
@@ -171,11 +172,10 @@ public:
 		values += 11,repeat(4,0xff),(0xff+1);
 		values += 12,0x01020304,0x0506070809,0xff,0x0a0b0c0d;
 		testCodec<G8IU>(values);
-		values.clear();
-		for(size_t i = 0; i < 10000000; i++) {
-			values.push_back(i);
+		if(boost::is_signed<Type>::value) {
+			values += -1,-2,-3,-4,-5,-6,-7,-8,-9,-10;
+			testCodec<G8IU>(values);
 		}
-		testCodec<G8IU>(values);
 	}
 
 	void benchmarkCodec()
@@ -212,18 +212,14 @@ public:
 			encodeWithCnt<Codec>(values, bufPtr);
 		}
 
-		if(typeid(Codec) == typeid(G8IU)
-				|| typeid(Codec) == typeid(G8IU)) {
-			
-			title = typeid(Codec).name();
-			title += ":";
-			title += typeid(Type).name();
-			title += ":constructTable";
-			{
-				PrintElapsedTime guard(title.c_str());
-				//Codec::getTable<Type>();
-			}
-		}
+		string comp_ratio;
+		comp_ratio = typeid(Codec).name();
+		comp_ratio += ":";
+		comp_ratio += typeid(Type).name();
+		comp_ratio += ":compression-ratio: ";
+		comp_ratio += boost::lexical_cast<std::string>(
+				double(bufPtr - &buf[0]) / (values.size() * sizeof(values[0])));
+		cout << comp_ratio << endl;
 
 		bufPtr = &buf[0];
 		title = typeid(Codec).name();
