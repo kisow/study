@@ -62,6 +62,7 @@ class VarintTest : public CppUnit::TestFixture
 	CPPUNIT_TEST(testG8IUCodec<int16_t>);
 	CPPUNIT_TEST(testG8IUCodec<int32_t>);
 	CPPUNIT_TEST(testG8IUCodec<int64_t>);
+	CPPUNIT_TEST(testG8CUCodec<uint16_t>);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -72,9 +73,9 @@ public:
 		typedef G8IU::Entry<INT_SIZE> Entry;
 
 		const Table& table = G8IU::getTable<INT_SIZE>();
-		for(size_t d = 0; d < Table::ENTRY_MAX; d++) {
-			const Entry& entry = table.getEntry(d);
-			const int8_t *seq = (int8_t*)&(entry.shuffleSequence[0]);
+		for(size_t d = 0; d < Table::DESC_MAX; d++) {
+			const Entry& entry = table.entries[d];
+			const int8_t *seq = (const int8_t*)&(entry.shuffleSequence[0]);
 
 			out << bitset<8>(d) << ' ';
 			out.width(2);
@@ -97,7 +98,7 @@ public:
 		}
 		out << "-------------------------------------" << endl;
 
-		for(size_t d = 0; d < Table::ENTRY_MAX; d++) {
+		for(size_t d = 0; d < Table::DESC_MAX; d++) {
 			out << bitset<8>(d) << ' ' << Entry::num(d) << '=';
 			for(size_t i = 0; i < Entry::num(d); i++) {
 				if(i > 0) out << '+';
@@ -178,6 +179,21 @@ public:
 		}
 	}
 
+	template <typename Type>
+	void testG8CUCodec()
+	{
+		vector<Type> values;
+		values += 1,2,3,4,5,6,7,8,9,10;
+		testCodec<G8CU>(values);
+		values += 11,repeat(4,0xff),(0xff+1);
+		values += 12,0x01020304,0x0506070809,0xff,0x0a0b0c0d;
+		testCodec<G8CU>(values);
+		if(boost::is_signed<Type>::value) {
+			values += -1,-2,-3,-4,-5,-6,-7,-8,-9,-10;
+			testCodec<G8CU>(values);
+		}
+	}
+
 	void benchmarkCodec()
 	{
 		cout << endl;
@@ -187,6 +203,7 @@ public:
 		benchmarkCodec<10000000,uint32_t,G8IU>();
 		benchmarkCodec<10000000,uint64_t,SU>();
 		benchmarkCodec<10000000,uint64_t,G8IU>();
+
 	}
 
 	template <size_t SIZE, typename Type, typename Codec>

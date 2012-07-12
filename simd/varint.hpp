@@ -96,6 +96,36 @@ void shuffleAndWrite(Input in[], Output out[], const Entry& entry)/*{{{*/
 	}
 }/*}}}*/
 
+template <typename Entry>
+void constructShuffleSequence(Entry& entry, uint8_t desc, uint8_t state)/*{{{*/
+{
+	const size_t INT_SIZE = Entry::MAX_SHUFFLE_SEQ_SIZE / Entry::MAX_INTCNT_PER_BLOCK;
+	size_t j = 0;
+	size_t k = 0;
+	size_t s = INT_SIZE - state;
+	int8_t *seq = &entry.shuffleSequence[0];
+
+	entry.outputOffset = INT_SIZE * Entry::num(desc) - state + Entry::rem(desc);
+	for(size_t i = 0; i < Entry::num(desc); i++) {
+		if(s < Entry::len(desc, i)) {
+			fill(seq, seq + Entry::MAX_SHUFFLE_SEQ_SIZE, -1);
+			entry.outputOffset = 0;
+			return;
+		}
+		for(size_t n = 0; n < s; n++) {
+			if(n < Entry::len(desc, i)) {
+				seq[k++] = j++;
+			} else {
+				seq[k++] = -1;
+			}
+		}
+		s = INT_SIZE;
+	}
+	for(size_t n = 0; n < Entry::rem(desc); n++) {
+		seq[k++] = j++;
+	}
+}/*}}}*/
+
 struct G8IU/*{{{*/
 {
 	template <typename InIterator, typename OutIterator>
@@ -149,7 +179,7 @@ struct G8IU/*{{{*/
 		auto out = first;
 
 		while(out != last) {
-			const auto& entry = table.getEntry(*in);
+			const auto& entry = table.entries[*in];
 			shuffleAndWrite(&(*++in), &(*out), entry);
 			in += entry.getInputOffset();
 			out += entry.getOutputOffset() / sizeof(Output);
@@ -167,34 +197,6 @@ struct G8IU/*{{{*/
 		uint8_t getInputOffset() const { return 8; }
 		uint8_t getOutputOffset() const { return outputOffset; }
 		const int8_t* getShuffleSequencePtr(size_t idx) const { return &shuffleSequence[idx]; }
-
-		void constructShuffleSequence(uint8_t desc, uint8_t state)/*{{{*/
-		{
-			size_t j = 0;
-			size_t k = 0;
-			size_t s = INT_SIZE - state;
-			int8_t *seq = &shuffleSequence[0];
-
-			outputOffset = INT_SIZE * num(desc) - state + rem(desc);
-			for(size_t i = 0; i < num(desc); i++) {
-				if(s < len(desc, i)) {
-					fill(seq, seq + MAX_SHUFFLE_SEQ_SIZE, -1);
-					outputOffset = 0;
-					return;
-				}
-				for(size_t n = 0; n < s; n++) {
-					if(n < len(desc, i)) {
-						seq[k++] = j++;
-					} else {
-						seq[k++] = -1;
-					}
-				}
-				s = INT_SIZE;
-			}
-			for(size_t n = 0; n < rem(desc); n++) {
-				seq[k++] = j++;
-			}
-		}/*}}}*/
 
 		static size_t len(uint8_t d, size_t i)/*{{{*/
 		{
@@ -218,23 +220,139 @@ struct G8IU/*{{{*/
 	template <size_t INT_SIZE>
 	struct Table/*{{{*/
 	{
-		static const size_t ENTRY_MAX = 256;
-		Entry<INT_SIZE>	entries[ENTRY_MAX];
+		static const size_t DESC_MAX = 256;
+		Entry<INT_SIZE>	entries[DESC_MAX];
 
 		Table()
 		{
-			for(size_t d = 0; d < ENTRY_MAX; d++) {
-				entries[d].constructShuffleSequence(d, 0);
+			for(size_t d = 0; d < DESC_MAX; d++) {
+				constructShuffleSequence(entries[d], d, 0);
 			}
-		}
-
-		const Entry<INT_SIZE>& getEntry(uint8_t desc) const
-		{
-			return entries[desc];
 		}
 	};/*}}}*/
 
 	template<size_t INT_SIZE>
+	static const Table<INT_SIZE>& getTable()/*{{{*/
+	{
+		static const Table<INT_SIZE> table;
+
+		return table;
+	}/*}}}*/
+};/*}}}*/
+
+struct G8CU/*{{{*/
+{
+	template <typename InIterator, typename OutIterator>
+	static void encode(InIterator first, InIterator last, OutIterator& out)/*{{{*/
+	{
+		typedef typename std::iterator_traits<InIterator>::value_type Input;
+		typedef typename std::iterator_traits<OutIterator>::value_type Output;
+		const size_t BUF_MAX = 9;
+
+		Output begin[BUF_MAX];
+		Output* it = &begin[1];
+		Output* end = &begin[BUF_MAX];
+		Output	shift = 0;
+
+		begin[0] = 0xff;
+		while(first != last) {
+			uint64_t org = static_cast<typename boost::make_unsigned<Input>::type>(*first);
+			uint64_t value = org;
+
+			do {
+				if(it == end) {
+					fill(it, end, 0);
+					std::copy(begin, end, out);
+					out += BUF_MAX;
+					it = &begin[1];
+					begin[0] = 0xff;
+					shift = 0;
+				}
+				(*it++) = value & 0xff; 
+				++shift;
+			} while(value >>= 8);
+			begin[0] ^= (1 << (shift - 1));
+			++first; 
+		}
+		std::copy(begin, it, out);
+		out += (it - begin);
+	}/*}}}*/
+
+	template <typename InIterator, typename OutIterator>
+	static void decode(InIterator& in, OutIterator first, OutIterator last)/*{{{*/
+	{
+		typedef typename std::iterator_traits<OutIterator>::value_type Output;
+		const size_t INT_SIZE = sizeof(Output);
+		const auto& table = getTable<INT_SIZE>();
+		auto out = first;
+		uint8_t state = 0;
+
+		while(out != last) {
+			const auto& entry = table.entries[state][*in];
+			shuffleAndWrite(&(*++in), &(*out), entry);
+			in += entry.getInputOffset();
+			out += entry.getOutputOffset();
+			state = entry.getNextState();
+		}
+	}/*}}}*/
+
+	template <size_t INT_SIZE>
+	struct Entry/*{{{*/
+	{
+		static const size_t MAX_INTCNT_PER_BLOCK = 8;
+		static const size_t MAX_SHUFFLE_SEQ_SIZE = MAX_INTCNT_PER_BLOCK * INT_SIZE;
+
+		int8_t	shuffleSequence[MAX_SHUFFLE_SEQ_SIZE];	// 16byte align 되어야 한다.
+		uint8_t	outputOffset __attribute__ ((aligned(8)));	
+		uint8_t	nextState __attribute__ ((aligned(8)));	
+		uint8_t getInputOffset() const { return 8; }
+		uint8_t getOutputOffset() const { return outputOffset; }
+		uint8_t getNextState() const { return nextState; }
+		const int8_t* getShuffleSequencePtr(size_t idx) const { return &shuffleSequence[idx]; }
+
+		static size_t len(uint8_t d, size_t i)/*{{{*/
+		{
+			while(i && d) {
+				if(!(d & 1)) --i;
+				d >>= 1;
+			}
+
+			size_t length = 1;
+			while(d & 1) {
+				++length;
+				d >>= 1;
+			}
+
+			return length;
+		}/*}}}*/
+		static size_t num(uint8_t d) { return 8 - bitset<8>(d).count(); }
+		static size_t rem(uint8_t d) 
+		{ 
+			size_t i = 1 << 7;
+			while((d & i) && i) i >>= 1;
+			return 8 - i; 
+		}
+	};/*}}}*/
+
+	template <size_t INT_SIZE>
+	struct Table/*{{{*/
+	{
+		static const size_t STATE_MAX = 8;
+		static const size_t DESC_MAX = 256;
+		Entry<INT_SIZE>	entries[STATE_MAX][DESC_MAX];
+
+		Table()
+		{
+			for(size_t s = 0; s < STATE_MAX; s++) {
+				for(size_t d = 0; d < DESC_MAX; d++) {
+					constructShuffleSequence(entries[s][d], d, s);
+					entries[s][d].nextState = Entry<INT_SIZE>::rem(d);
+				}
+			}
+		}
+	};/*}}}*/
+
+	template <size_t INT_SIZE>
 	static const Table<INT_SIZE>& getTable()/*{{{*/
 	{
 		static const Table<INT_SIZE> table;
