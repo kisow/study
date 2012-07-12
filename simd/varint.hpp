@@ -9,7 +9,6 @@
 #include <iostream>
 #include <iterator>
 #include <bitset>
-#include <boost/type_traits.hpp>
 
 namespace varint {
 
@@ -23,7 +22,7 @@ void encodeSU(Iterator& it, Type value)/*{{{*/
 		uint8_t byteCode = (uint8_t)(value & 0x7f);
 		// signed 음수 값에 대한 방어코드
 		// 단, 음수 값에 대해서는 오히려 크기가 더 늘어나는 점에 유의
-		value = static_cast<typename boost::make_unsigned<Type>::type>(value) >> 7;
+		value = static_cast<typename make_unsigned<Type>::type>(value) >> 7;
 		if(value != 0) byteCode |= 0x80;
 		*it = byteCode;
 		++it;
@@ -240,6 +239,7 @@ struct G8IU/*{{{*/
 	}/*}}}*/
 };/*}}}*/
 
+#if 0
 struct G8CU/*{{{*/
 {
 	template <typename InIterator, typename OutIterator>
@@ -360,6 +360,7 @@ struct G8CU/*{{{*/
 		return table;
 	}/*}}}*/
 };/*}}}*/
+#endif
 
 template <typename Codec, typename InContainer, typename OutIterator>
 void encodeWithCnt(InContainer& in, OutIterator& out)/*{{{*/

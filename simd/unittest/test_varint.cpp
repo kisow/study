@@ -62,7 +62,7 @@ class VarintTest : public CppUnit::TestFixture
 	CPPUNIT_TEST(testG8IUCodec<int16_t>);
 	CPPUNIT_TEST(testG8IUCodec<int32_t>);
 	CPPUNIT_TEST(testG8IUCodec<int64_t>);
-	CPPUNIT_TEST(testG8CUCodec<uint16_t>);
+//	CPPUNIT_TEST(testG8CUCodec<uint16_t>);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -179,6 +179,7 @@ public:
 		}
 	}
 
+#if 0
 	template <typename Type>
 	void testG8CUCodec()
 	{
@@ -193,6 +194,7 @@ public:
 			testCodec<G8CU>(values);
 		}
 	}
+#endif
 
 	void benchmarkCodec()
 	{

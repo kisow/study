@@ -53,7 +53,7 @@ struct has_end : private yes_no
 						>::value
 					>::type*);
 
-		template<typename C> static no (&f(...))[2];
+		template<typename C> static no f(...);
 
 	public:
 		static const bool value = sizeof(f<T>(0)) == sizeof(yes);
