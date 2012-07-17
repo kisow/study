@@ -1,18 +1,22 @@
 .SUFFIXES: .cpp .o
 
-CXX=g++ -O3
-SRCS = simple.cpp
-OBJS = ${SRCS:.cpp=.o}
+CXX=g++ -O0
+#SRCS = $(wildcard *.cpp) 
+#OBJS = ${SRCS:.cpp=.o}
 CPPFLAGS=-g 
 
-test: simple
+test: simple mmap
 	./simple 
+	valgrind ./mmap 
 
-simple: $(OBJS)
-	$(CXX) $(CPPFLAGS) -o $@ $(OBJS) -lrt
+simple: simple.o
+	$(CXX) $(CPPFLAGS) -o $@ $< -lrt
+
+mmap: mmap.o
+	$(CXX) $(CPPFLAGS) -o $@ $< -lrt
 
 .cpp.o:
 	$(CXX) $(CPPFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(OBJS) simple
+	$(RM) *.o simple mmap
