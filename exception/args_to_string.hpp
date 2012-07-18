@@ -51,11 +51,13 @@ namespace args
 	};/*}}}*/
 
 	template<typename... A>
-	static inline string toString(A&&... a)
+	inline string toString(A&&... a)
 	{
 		auto t = detail::TupleMaker<sizeof...(A), A...>::make(a...);
 		return detail::TupleConverter<decltype(t), sizeof...(A)>::convert(t);
 	}
+
+	inline string toString() { return string(); }
 };
 
 #endif // end of include guard: __ARGS_TO_STRING_HPP__ 

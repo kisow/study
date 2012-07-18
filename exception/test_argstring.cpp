@@ -53,6 +53,7 @@ int main()
 	Base *basePtr = new Derived();
 	std::shared_ptr<Base> baseSharedPtr(new Derived());
 
+	F();
 	F(c, uc, 'y', "YYY", array, string("std::string"));
 	F(i8, i16, i32, i64, -1, -10L, -100LL);
 	F(ui8, ui16, ui32, ui64, 1, 10UL, 100ULL);
