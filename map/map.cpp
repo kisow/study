@@ -8,6 +8,7 @@
 #include <iostream>
 #include <map>
 #include <ext/hash_map>
+#include <boost/config.hpp>
 
 using namespace std;
 using namespace std;
@@ -73,6 +74,8 @@ int main(int argc, char *argv[])
 	checkTime<BoostMap>();
 	checkTime<StdMap>();
 	checkTime<HashMap>();
+
+	cout << BOOST_COMPILER << endl;
 
 	return 0;
 }

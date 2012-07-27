@@ -7,8 +7,8 @@ namespace ir {
 
 struct yes_no
 {
-	typedef char                      yes;
-	typedef struct { char array[2]; } no;
+	typedef char yes;
+	typedef char (&no)[2];  
 };
 
 template <typename T>

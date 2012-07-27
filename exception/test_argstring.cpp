@@ -1,12 +1,10 @@
 #include <iostream>
 #include <memory>
 
-namespace sigma_base
-{
-#include "args_to_string.hpp"
-};
+#include "cubs_string.hpp"
 
 using namespace std;
+using namespace cubs;
 
 struct Base
 {
@@ -19,7 +17,30 @@ struct Derived : public Base
 };
 
 #define F(...) {    \
-	cout << '(' << #__VA_ARGS__ << ") = (" << sigma_base::args::toString(__VA_ARGS__) << ')' << endl; \
+	cout << '(' << #__VA_ARGS__ << ") = (" << cubs::toString(__VA_ARGS__) << ')' << endl; \
+}
+
+enum ani_oooml
+{
+	stop = 0,
+	cut = 1,
+};
+
+inline void fromString(const string& str, ani_oooml& value) 
+{ 
+	if(str.compare("cut") == 0) value = cut;
+	else value = stop;
+}
+
+inline string toString(ani_oooml value) 
+{ 
+	switch(value)
+	{
+		case cut: return "cut";
+		case stop: 
+		default:
+				  return "stop";
+	}
 }
 
 int main()
@@ -59,6 +80,24 @@ int main()
 	F(ui8, ui16, ui32, ui64, 1, 10UL, 100ULL);
 	F(l, ll, ul, ull, f1_call);
 	F(f32, d64, fn, voidPtr, voidPtrRef, basePtr, baseSharedPtr);
+
+	i32 = fromString("-10");
+	cout << i32 << endl;
+	ui32 = fromString("10");
+	cout << ui32 << endl;
+	f32 = fromString("10");
+	cout << f32 << endl;
+
+	ani_oooml oooml = fromString("cut");
+	cout << toString(oooml) << endl;
+
+	string str = fromString("str");
+	cout << str << endl;
+
+	string b = fromString("aaa").to<string>();
+	cout << toString(b) << endl;
+	uint32_t kk = fromString("-10");
+	cout << kk << endl;
 
 	return 0;
 }
