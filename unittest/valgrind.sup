@@ -1,0 +1,30 @@
+{
+   dlopen memory leak - malloc
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+}
+{
+   dlopen memory leak - calloc
+   Memcheck:Leak
+   fun:calloc
+   fun:_dlerror_run
+}
+{
+   ir_comm memory leak - malloc
+   Memcheck:Leak
+   fun:malloc
+   fun:_ZN2ir18ByteTruncAllocator8allocateEmPKv
+}
+{
+   ir_comm memory leak - malloc
+   Memcheck:Leak
+   fun:malloc
+   fun:_ZN2ir14FixedAllocatorINS_11linkedblockENS_4LockEE8allocateEmPKv
+}

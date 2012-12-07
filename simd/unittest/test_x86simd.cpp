@@ -1,7 +1,6 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "ir_test.hpp"
 
 #include <iostream>
 #include <bitset>

@@ -1,12 +1,12 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "ir_test.hpp"
 
 #include <sys/time.h>
 #include <string>
 #include <bitset>
 #include <iostream>
+#include <limits>
 #include <boost/type_traits.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/assign/list_of.hpp>
@@ -172,6 +172,7 @@ public:
 		testCodec<G8IU>(values);
 		values += 11,repeat(4,0xff),(0xff+1);
 		values += 12,0x01020304,0x0506070809,0xff,0x0a0b0c0d;
+		values.push_back(std::numeric_limits<Type>::max());
 		testCodec<G8IU>(values);
 		if(boost::is_signed<Type>::value) {
 			values += -1,-2,-3,-4,-5,-6,-7,-8,-9,-10;
@@ -215,9 +216,9 @@ public:
 
 		values.resize(SIZE);
 		for(size_t i = 0; i < SIZE; i++) {
-			values[i] = i;
+			values[i] = numeric_limits<Type>::max();//i;
 		}
-		buf.resize((sizeof(values[0]) + 1) * values.size());
+		buf.resize((sizeof(values[0]) * 2) * values.size());
 
 		uint8_t* bufPtr = &buf[0];
 		title = typeid(Codec).name();
