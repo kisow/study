@@ -43,6 +43,12 @@ inline string toString(ani_oooml value)
 	}
 }
 
+template<typename T>
+T myFromString(const string& str)
+{
+	return fromString(str);
+}
+
 int main()
 {
 	void (*f1_call)();
@@ -91,12 +97,13 @@ int main()
 	ani_oooml oooml = fromString("cut");
 	cout << toString(oooml) << endl;
 
-	string str = fromString("str");
+	string str = fromString("str");		// copy constructor
+	str = fromString("str");			// copy operator
 	cout << str << endl;
 
 	string b = fromString("aaa").to<string>();
 	cout << toString(b) << endl;
-	uint32_t kk = fromString("-10");
+	uint32_t kk = myFromString("-10");
 	cout << kk << endl;
 
 	return 0;

@@ -11,9 +11,11 @@ OBJS = $(SRCS:.cpp=.o)
 TARGET = unit_test
 
 INCLUDE = -I$(CPPUNIT_DIR)/include -I$(UNIT_TEST_DIR) \
-		  -I$(SRC_DIR) -I..
+		  -I$(SRC_DIR) -I.. \
+		  -I/home/set/boost-ntrunk/include
 
-CFLAGS = -msse2 -mssse3 -g -O3 -std=c++11 -Wall -Wextra -Wno-unused-parameter $(INCLUDE)
+#CFLAGS = -msse2 -mssse3 -g -O3 -std=c++11 -Wall -Wextra -Wno-unused-parameter $(INCLUDE)
+CFLAGS = -march=native -g -O2 -std=c++11 -Wall -Wextra -Wno-unused-parameter $(INCLUDE)
 LDFLAGS = -L$(CPPUNIT_DIR)/lib -lcppunit -ldl \
 
 
