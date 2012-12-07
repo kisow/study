@@ -1,9 +1,8 @@
-NEXUS_DIR = /home1/kisow/work/trunk
 SRC_DIR = ..
 LD_LIBRARY_PATH := $(SRC_DIR):$(LD_LIBRARY_PATH)
 
 CPPUNIT_DIR = /usr/local
-UNIT_TEST_DIR = $(NEXUS_DIR)/resources/unittest
+UNIT_TEST_DIR = ../../unittest
 
 SRC_MAIN = $(UNIT_TEST_DIR)/ir_test_main.cpp
 SRCS = $(wildcard test_*.cpp)
@@ -12,9 +11,7 @@ TARGET = unit_test
 
 INCLUDE = -I$(CPPUNIT_DIR)/include -I$(UNIT_TEST_DIR) \
 		  -I$(SRC_DIR) -I.. \
-		  -I/home/set/boost-ntrunk/include
 
-#CFLAGS = -msse2 -mssse3 -g -O3 -std=c++11 -Wall -Wextra -Wno-unused-parameter $(INCLUDE)
 CFLAGS = -march=native -g -O2 -std=c++11 -Wall -Wextra -Wno-unused-parameter $(INCLUDE)
 LDFLAGS = -L$(CPPUNIT_DIR)/lib -lcppunit -ldl \
 
