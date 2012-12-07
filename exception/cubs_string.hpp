@@ -164,7 +164,7 @@ inline string toString() { return string(); }
 template <typename T>
 inline void fromString(const string& str, T& value,
 		typename enable_if<
-			is_arithmetic<T>::value
+			(is_arithmetic<T>::value && is_same<T, char>::value == false)
 			|| is_same<T, string>::value
 			, T>::type* = 0)
 {
@@ -180,23 +180,17 @@ struct FromStringProxy
 {
 	string str_;
 	FromStringProxy(const string& str) : str_(str) {}
+
 	template <typename T,
 		typename = typename enable_if<
-			is_arithmetic<T>::value
+			(is_arithmetic<T>::value && is_same<T, char>::value == false)
 			|| is_enum<T>::value
 			|| is_same<T, string>::value
 			|| is_same<T, bool>::value
 			, T>::type
-	>
-	operator T()
-	{
-		T value;
-		fromString(str_, value);
-		return value;
-	}
-	
-	template <typename T>
-	T to()
+		> operator T() { return to<T>(); }
+
+	template <typename T> T to()
 	{
 		T value;
 		fromString(str_, value);

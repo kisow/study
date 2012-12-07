@@ -5,7 +5,7 @@ all: clean test_exception libf1.so test_argstring
 	./test_argstring
 
 test_argstring: test_argstring.cpp
-		$(CC) -o test_argstring test_argstring.cpp
+		$(CC) -fPIC -o test_argstring test_argstring.cpp
 
 test_exception: test_exception.cpp exception.h
 		$(CC) -ldl -o test_exception test_exception.cpp

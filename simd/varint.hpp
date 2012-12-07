@@ -239,7 +239,6 @@ struct G8IU/*{{{*/
 	}/*}}}*/
 };/*}}}*/
 
-#if 0
 struct G8CU/*{{{*/
 {
 	template <typename InIterator, typename OutIterator>
@@ -360,7 +359,6 @@ struct G8CU/*{{{*/
 		return table;
 	}/*}}}*/
 };/*}}}*/
-#endif
 
 template <typename Codec, typename InContainer, typename OutIterator>
 void encodeWithCnt(InContainer& in, OutIterator& out)/*{{{*/

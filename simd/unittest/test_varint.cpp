@@ -179,7 +179,6 @@ public:
 		}
 	}
 
-#if 0
 	template <typename Type>
 	void testG8CUCodec()
 	{
@@ -194,7 +193,6 @@ public:
 			testCodec<G8CU>(values);
 		}
 	}
-#endif
 
 	void benchmarkCodec()
 	{
