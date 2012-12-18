@@ -4,7 +4,7 @@ CXX=g++
 SRC = $(wildcard *.cpp)
 OBJ = $(SRC:.cpp=.o)
 TARGET = $(SRC:.cpp=)
-CPPFLAGS=-g -O3
+CPPFLAGS=-g -O2 -std=c++11
 
 test: $(TARGET)
 	./$(TARGET)

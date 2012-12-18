@@ -7,8 +7,10 @@
 #include <string>
 #include <iostream>
 #include <map>
-#include <ext/hash_map>
+#include <unordered_map>
 #include <boost/config.hpp>
+
+#include "tst.hpp"
 
 using namespace std;
 using namespace std;
@@ -27,9 +29,9 @@ class PrintElapsedTime
 
 			gettimeofday(&end, NULL);
 			if(end.tv_sec >= start_.tv_sec) {
-				printf("%s: Elapsed time: %dm%02ds\n", progname_.c_str(), 
-						static_cast<int>((end.tv_sec - start_.tv_sec)) / 60,
-						static_cast<int>((end.tv_sec - start_.tv_sec)) % 60);
+				printf("%s: Elapsed time: %f sec\n", progname_.c_str(), 
+						end.tv_sec + double(end.tv_usec) / 1000000.0
+						- (start_.tv_sec + double(start_.tv_usec) / 1000000.0));
 			}
 		}
 
@@ -42,7 +44,7 @@ template <typename MapType>
 void checkTime()
 {
 	PrintElapsedTime pt(typeid(MapType).name());
-	uint32_t max = 1 << 21;
+	uint32_t max = 1 << 20;
 	MapType x;
 
 	for(uint32_t i = 0; i < max; i++) {
@@ -50,30 +52,30 @@ void checkTime()
 	}
 	for(uint32_t i = 0; i < max; i++) {
 		uint32_t j = x[boost::lexical_cast<string>(i)];
-	}
-	for(uint32_t i = 0; i < max; i++) {
-		uint32_t j = x[boost::lexical_cast<string>(i)];
+		assert(j == i);
 	}
 }
 
-namespace __gnu_cxx
-{
-  template<> struct hash<string>
-  {
-    size_t operator()(const string& __s) const
-    { return __stl_hash_string(__s.c_str()); }
-  };
-}
+//namespace __gnu_cxx
+//{
+//  template<> struct hash<string>
+//  {
+//    size_t operator()(const string& __s) const
+//    { return __stl_hash_string(__s.c_str()); }
+//  };
+//}
 
 int main(int argc, char *argv[])
 {
 	typedef boost::unordered_map<string, uint32_t> BoostMap;
 	typedef std::map<string, uint32_t> StdMap;
-	typedef __gnu_cxx::hash_map<string, uint32_t> HashMap;
+	typedef std::unordered_map<string, uint32_t> HashMap;
+	typedef TernarySearchTree<uint32_t> TSTMap;
 
 	checkTime<BoostMap>();
 	checkTime<StdMap>();
 	checkTime<HashMap>();
+	checkTime<TSTMap>();
 
 	cout << BOOST_COMPILER << endl;
 
