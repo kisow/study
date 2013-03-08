@@ -200,6 +200,7 @@ public:
 		cout << endl;
 		benchmarkCodec<10000000,uint16_t,SU>();
 		benchmarkCodec<10000000,uint16_t,G8IU>();
+		benchmarkCodec<10000000,uint32_t,PU>();
 		benchmarkCodec<10000000,uint32_t,SU>();
 		benchmarkCodec<10000000,uint32_t,G8IU>();
 		benchmarkCodec<10000000,uint64_t,SU>();
@@ -216,7 +217,7 @@ public:
 
 		values.resize(SIZE);
 		for(size_t i = 0; i < SIZE; i++) {
-			values[i] = numeric_limits<Type>::max();//i;
+			values[i] = i; //numeric_limits<Type>::max();//i;
 		}
 		buf.resize((sizeof(values[0]) * 2) * values.size());
 

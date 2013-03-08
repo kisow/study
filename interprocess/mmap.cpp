@@ -13,11 +13,11 @@ int main(int argc, char *argv[])
 {
 	int fd = 0;
 
-	fd = open("aaa", O_CREAT | O_TRUNC | O_RDWR, 0600);
+	fd = open("mmap_data", O_CREAT | O_TRUNC | O_RDWR, 0600);
 	write(fd, "version", 8);
 	close(fd);
 
-	fd = open("aaa", O_RDWR);
+	fd = open("mmap_data", O_RDWR);
 	char buf[100] = {0};
 	char *ptr = (char*)mmap(NULL, 8, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 

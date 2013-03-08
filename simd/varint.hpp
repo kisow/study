@@ -15,6 +15,96 @@ namespace varint {
 using namespace std;
 using namespace x86simd;
 
+	//! VBE (PACKED UNARY) /*{{{*/
+	namespace pu {
+		inline size_t getWorstVbeBufferSize(size_t dataCount)
+		{
+			return (sizeof(uint32_t) + 1) /* descriptor : 1 */
+				* (dataCount + 1); /* count : 1 */
+		}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//! VBE 인코딩/*{{{*/
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	inline void decodeVbe(const char*& ptr, uint32_t& value) /*{{{*/
+	{
+		if(!(*ptr & 0x80)) {							// 0
+			value = *(ptr)++;
+		} else if(!(*ptr & 0x40)) {						// 10
+			value = ((uint8_t)(*((ptr))++ & 0x3f)) << 8;
+			value += ((uint8_t)(*(ptr)++));
+		} else if (!(*ptr & 0x20)) {					// 110
+			value = ((uint8_t)(*(ptr)++ & 0x1f)) << 16;
+			value += ((uint8_t)(*(ptr)++)) << 8;
+			value += ((uint8_t)(*(ptr)++));
+		} else if (!(*ptr & 0x10)) {					// 1110
+			value = ((uint8_t)(*(ptr)++ & 0x0f)) << 24;
+			value += ((uint8_t)(*(ptr)++)) << 16;
+			value += ((uint8_t)(*(ptr)++)) << 8;
+			value += ((uint8_t)(*(ptr)++));
+		} else {										// 11110
+			ptr++;
+			value = ((uint8_t)(*(ptr)++)) << 24;
+			value += ((uint8_t)(*(ptr)++)) << 16;
+			value += ((uint8_t)(*(ptr)++)) << 8;
+			value += ((uint8_t)(*(ptr)++));
+		}	
+	}/*}}}*/
+
+	inline void encodeVbe(char*& ptr, uint32_t value) /*{{{*/
+	{
+		if(value < (1<<7)) {							// 0
+			ptr[0] = *(((uint8_t *)&value) + 0); 
+			ptr++; 
+		} else if(value < (1<<14)) {					// 10
+			ptr[0] = 0x80 | *(((uint8_t *)&value) + 1); 
+			ptr[1] = *(((uint8_t *)&value) + 0); 
+			ptr += 2; 
+		} else if (value < (1<<21)) {					// 110
+			ptr[0] = 0xc0 | *(((uint8_t *)&value) + 2); 
+			ptr[1] = *(((uint8_t *)&value) + 1); 
+			ptr[2] = *(((uint8_t *)&value) + 0); 
+			ptr += 3; 
+		} else if (value < (1<<27)) {					// 1110
+			ptr[0] = 0xe0 | *(((uint8_t *)&value) + 3); 
+			ptr[1] = *(((uint8_t *)&value) + 2); 
+			ptr[2] = *(((uint8_t *)&value) + 1); 
+			ptr[3] = *(((uint8_t *)&value) + 0); 
+			ptr += 4; 
+		} else {										// 11110
+			ptr[0] = 0xf0;
+			ptr[1] = *(((uint8_t *)&value) + 3); 
+			ptr[2] = *(((uint8_t *)&value) + 2); 
+			ptr[3] = *(((uint8_t *)&value) + 1); 
+			ptr[4] = *(((uint8_t *)&value) + 0); 
+			ptr += 5; 
+		}	
+	}/*}}}*/
+	/*}}}*/
+
+	};/*}}}*/
+
+struct PU/*{{{*/
+{
+	template <typename InIterator, typename OutIterator>
+	static void encode(InIterator first, InIterator last, OutIterator& out)/*{{{*/
+	{
+		while(first != last) {
+			pu::encodeVbe(*(char**)&out, *first);
+			++first;
+		}
+	}/*}}}*/
+
+	template <typename InIterator, typename OutIterator>
+	static void decode(InIterator& in, OutIterator first, OutIterator last)/*{{{*/
+	{
+		while(first != last) {
+			pu::decodeVbe(*(const char**)&in, *first);
+			++first;
+		}
+	}/*}}}*/
+};/*}}}*/
+
 template <typename Type, typename Iterator>
 void encodeSU(Iterator& it, Type value)/*{{{*/
 {

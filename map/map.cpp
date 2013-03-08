@@ -44,7 +44,7 @@ template <typename MapType>
 void checkTime()
 {
 	PrintElapsedTime pt(typeid(MapType).name());
-	uint32_t max = 1 << 20;
+	uint32_t max = 1 << 21;
 	MapType x;
 
 	for(uint32_t i = 0; i < max; i++) {
