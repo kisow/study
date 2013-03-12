@@ -9,7 +9,7 @@ BOOST_DIR= /home1/set/boost-ntrunk
 CXXFLAGS=-g -isystem $(BOOST_DIR)/include
 
 test: $(TARGETS)
-	./xsi_shm
+	./$(TARGETS)
 
 $(TARGETS): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $@.o -lrt -l pthread

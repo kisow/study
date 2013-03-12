@@ -15,9 +15,6 @@
 using namespace std;
 using namespace boost::interprocess;
 
-//const size_t MEMORY_LIMIT = 20ULL * 1024 * 1024 * 1024; 
-const size_t MEMORY_LIMIT = 65535;
-
 template <typename T>
 struct up
 {
@@ -26,7 +23,7 @@ struct up
 
 #define PRINT (cout << getpid() << " : " << __LINE__ << " : ")
 
-
+template <typename KeyType>
 class SharedMemoryCache 
 {
 public:
@@ -34,7 +31,6 @@ public:
 	typedef boost::interprocess::allocator<char, SegmentManager> CharAllocator;
 	typedef boost::interprocess::basic_string<char, std::char_traits<char>, CharAllocator> ShmemString;
 	typedef boost::interprocess::allocator<ShmemString, SegmentManager> ShmemStringAllocator;
-	typedef int  KeyType;
 	typedef ShmemString  ValueType;
 	typedef std::pair<const KeyType, ValueType> PairType;
 	typedef boost::interprocess::allocator<void, SegmentManager> VoidAllocator;
@@ -76,7 +72,7 @@ public:
 		cout << "key count : " << map_->size() << endl;
 	}
 
-	void put(const int key, const std::string& value)
+	void put(const KeyType& key, const std::string& value)
 	{
 		ScopedLock lock(*mutex_);
 
@@ -84,8 +80,7 @@ public:
 		if(it == map_->end()) {
 			do {
 				try {
-					ShmemString sv(value.c_str(), *alloc_);
-					map_->insert(PairType(key, sv));
+					map_->emplace(key, ShmemString(value.c_str(), *alloc_));
 				} catch (boost::interprocess::bad_alloc& ex) {
 					pop();
 					continue;
@@ -96,7 +91,7 @@ public:
 		}
 	}
 
-	bool get(const int key, std::string& value)
+	bool get(const KeyType& key, std::string& value)
 	{
 		ScopedLock lock(*mutex_);
 
@@ -115,11 +110,8 @@ private:
 	bool pop()
 	{
 		if(map_->empty() == false) {
-			const auto victim_key = map_->begin()->first;
-			const auto victim_it = map_->find(victim_key);
-			PRINT << "pop : " << getFreeMemory() << ' ' << map_->size() << endl;
+			const auto victim_it = map_->begin();
 			if(victim_it != map_->end()) map_->erase(victim_it);
-			PRINT << "pop : " << getFreeMemory() << ' ' << map_->size() << endl;
 		}
 	}
 
@@ -129,50 +121,3 @@ private:
 	ShmemMap*	map_;
 	SharableMutex*	mutex_;
 };
-
-int main(int argc, char *argv[])
-{
-	try {
-		xsi_key key(argv[0], 1);
-
-		SharedMemoryCache c(key, MEMORY_LIMIT);
-
-		if(argc > 1) {
-			if((*argv[1]) == '1') {
-				SharedMemoryCache::destroy(key);
-				PRINT << "remove " << argv[0] << endl;
-				return 0;
-			} else {
-				c.printInfo();
-				return 0;
-			}
-		}
-
-//		fork();
-//		fork();
-//		fork();
-//		fork();
-
-		PRINT << c.getFreeMemory() << endl;
-
-		srand(getpid());
-		//Insert data in the map
-		for(int i = 0; i < 10000; i++) {
-			int key = rand() % 300;
-			std::string value;
-
-			if(c.get(key, value)) {
-				PRINT << "hit : [" << key << ']' << endl;//value << endl;
-			} else {
-				value.assign(key, 'v');
-				c.put(key, value);
-				PRINT << "miss : [" << key << ']' << endl;//value << endl;
-			}
-		}
-	} catch (std::exception& ex) {
-		PRINT << ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; " << ex.what() << endl;
-		return 1;
-	}
-
-	return 0;
-}

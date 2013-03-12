@@ -1,0 +1,67 @@
+---------------------------------------------------------------------
+BD Software STL Message Decryptor v3.10 for gcc 2/3/4
+---------------------------------------------------------------------
+Command line: '-width:185'
+banner = Y
+break_algorithm = D
+comma_wrap = B
+close_wrap = Y
+output_width = 185
+tabsize = 4
+advise_re_policy_opts = 1
+reformat_linenumbers = 0
+wrap_own_msgs = 0
+header_policy = L
+with_policy = S
+headers_to_show = 1
+candidate_policy = L
+pathname_policy = S
+show_backtraces = Y
+---------------------------------------------------------------------
+Native input follows:
+---------------------------------------------------------------------
+
+Raw unprocessed input line:
+/home1/set/boost-ntrunk/include/boost/interprocess/detail/named_proxy.hpp:67:10:   required from ‘void nexus_boost::interprocess::ipcdetail::CtorNArg<T, is_iterator, Args>::construct_n(void*, std::size_t, std::size_t&) [with T = int; bool is_iterator = false; Args = {int, nexus_boost::hash<int>, std::equal_to<int>, nexus_boost::interprocess::allocator<void, nexus_boost::interprocess::segment_manager<char, nexus_boost::interprocess::rbtree_best_fit<nexus_boost::interprocess::mutex_family, nexus_boost::interprocess::offset_ptr<void, long int, long unsigned int, 0ul>, 0ul>, nexus_boost::interprocess::iset_index> >&}; std::size_t = long unsigned int]’
+
+
+
+The line at the point of the error was:
+int; bool is_iterator = false; Args = {int, is_iterator, Args>::construct_n(void *, long unsigned int, long unsigned int &)’
+
+                                                             ^
+
+Nesting key: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+
+STL Decryptor ERROR: the char '>' (position 61) DOESN'T MATCH DELIMITER '{'!
+shm_cache.cpp:182:1:   required from here
+/home1/set/boost-ntrunk/include/boost/interprocess/detail/named_proxy.hpp:79:7: error: new initializer expression list treated as compound expression [-fpermissive]
+
+The line at the point of the error was:
+int; bool is_iterator = false; Args = {int, is_iterator, Args>::construct(void *, nexus_boost::interprocess::ipcdetail::nexus_boost::interprocess::ipcdetail::bool_<false>, const nexus_boost::interprocess::ipcdetail::index_tuple<{0 ...> &)’
+
+                                                             ^
+
+Nesting key: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+
+STL Decryptor ERROR: the char '>' (position 61) DOESN'T MATCH DELIMITER '{'!
+/home1/set/boost-ntrunk/include/boost/interprocess/detail/named_proxy.hpp:79:7: error: cannot convert ‘nexus_boost::interprocess::allocator<void, nexus_boost::interprocess::segment_manager<char, nexus_boost::interprocess::rbtree_best_fit<nexus_boost::interprocess::mutex_family>, nexus_boost::interprocess::iset_index> >’ to ‘int’ in initialization
+
+The line at the point of the error was:
+int; bool is_iterator = false; Args = {int, is_iterator, Args>::construct(void *, nexus_boost::interprocess::ipcdetail::nexus_boost::interprocess::ipcdetail::bool_<false>, const nexus_boost::interprocess::ipcdetail::index_tuple<{0 ...> &)’
+
+                                                             ^
+
+Nesting key: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+
+STL Decryptor ERROR: the char '>' (position 61) DOESN'T MATCH DELIMITER '{'!
+make: *** [shm_cache.o] 오류 1
+
+The line at the point of the error was:
+int; bool is_iterator = false; Args = {int, is_iterator, Args>::construct(void *, nexus_boost::interprocess::ipcdetail::nexus_boost::interprocess::ipcdetail::bool_<false>, const nexus_boost::interprocess::ipcdetail::index_tuple<{0 ...> &)’
+
+                                                             ^
+
+Nesting key: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+
+STL Decryptor ERROR: the char '>' (position 61) DOESN'T MATCH DELIMITER '{'!
