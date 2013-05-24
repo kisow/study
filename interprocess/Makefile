@@ -1,12 +1,12 @@
 .SUFFIXES: .cpp .o
 
-CXX=g++ -std=c++11 -O2 -fno-partial-inlining
+CXX=g++ -std=c++11 -O2 #-fno-partial-inlining
 
 SRCS = $(wildcard *.cpp) 
 OBJS = $(SRCS:.cpp=.o)
 TARGETS = $(SRCS:.cpp=)
-BOOST_DIR= /home1/set/boost-ntrunk/include/boost
-CXXFLAGS=-g -isystem $(BOOST_DIR)/include
+BOOST_DIR= /home1/set/boost-ntrunk
+CXXFLAGS=-g -I $(BOOST_DIR)/include
 
 test: $(TARGETS)
 	./xsi_shm
