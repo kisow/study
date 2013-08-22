@@ -1,5 +1,6 @@
 #include <array>
 #include <cstdint>
+#include <algorithm>
 
 #define SCHEDULE(i)  \
 	temp = schedule[(i-3)&0xF]	\
@@ -39,7 +40,7 @@ struct Sha1 : public std::array<uint32_t, 5>
 {
 	Sha1(const Sha1& src)
 	{
-		copy(src.begin(), src.end(), begin());
+		std::copy(src.begin(), src.end(), begin());
 	}
 	Sha1(const uint8_t* ptr, uint32_t length)
 	{
