@@ -1,0 +1,4 @@
+SUBDIRS = \
+		  map						\
+		  $(NULL)
+
