@@ -1,3 +1,11 @@
-.svn
-*.swp
-*.o
+aclocal.m4
+config.h.in
+config.h.in~
+config.guess
+config.sub
+configure
+compile
+depcomp
+install-sh
+missing
+autom4te.cache
