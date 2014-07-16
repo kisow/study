@@ -1,6 +1,9 @@
 aclocal.m4
+config.h
 config.h.in
 config.h.in~
+config.log
+config.status
 config.guess
 config.sub
 configure
@@ -9,3 +12,10 @@ depcomp
 install-sh
 missing
 autom4te.cache
+
+Makefile
+stamp-h1
+.deps
+*.o
+
+bin
