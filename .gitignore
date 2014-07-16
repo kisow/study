@@ -17,5 +17,10 @@ Makefile
 stamp-h1
 .deps
 *.o
+*.log
+*.trs
+*_test
+test_main.cpp
+test-driver
 
 bin

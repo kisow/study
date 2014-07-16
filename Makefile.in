@@ -295,6 +295,7 @@ top_srcdir = @top_srcdir@
 SUBDIRS = \
 		  map						\
 		  simd						\
+		  type_traits				\
 		  $(NULL)
 
 all: config.h

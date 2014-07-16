@@ -9,5 +9,6 @@ AC_CONFIG_FILES([
 				 map/Makefile
 				 simd/Makefile
 				 simd/unittest/Makefile
+				 type_traits/Makefile
 				 ])
 AC_OUTPUT
