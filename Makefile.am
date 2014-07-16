@@ -1,4 +1,5 @@
 SUBDIRS = \
+		  io						\
 		  map						\
 		  simd						\
 		  type_traits				\

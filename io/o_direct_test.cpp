@@ -9,13 +9,12 @@
 #include <sys/stat.h>
 
 #define SECTOR_SIZE 512
-//#define BUF_SIZE 512//(SECTOR_SIZE * 32)
+#define DEFAULT_BUF_SIZE (SECTOR_SIZE * 32)
 #define DATA_SIZE (1048576UL * 5)
-
 
 int main(int argc, char **argv)
 {
-	int BUF_SIZE = 512;
+	int BUF_SIZE = DEFAULT_BUF_SIZE;
 	int i, fd, rv;
 	char *addr = NULL;
 	void *buf = NULL;
@@ -44,8 +43,7 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Failed to open %s: %s\n", argv[1], strerror(errno));
 		exit(EXIT_FAILURE);
 	}
-//	for (i = DATA_SIZE; i > 0; i -= BUF_SIZE) {
-	for (i = 0; i < 1000; i++) {
+	for (i = DATA_SIZE; i > 0; i -= BUF_SIZE) {
 		if (pread(fd, buf, BUF_SIZE, 0) == -1) {
 			fprintf(stderr, "Failed to write %s: %s\n", argv[1], strerror(errno));
 			exit(EXIT_FAILURE);
