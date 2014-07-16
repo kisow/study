@@ -1,7 +1,0 @@
-
-* This directory includes helper files for unit testing.
- - ir_test.hpp : Helper macroes to help making test suites.
- _ ir_test_main.cpp : Main driver file for executing test suites.
-
-* example : Example files for a typical unit test. Can be used as a templete
- of a new unit test dricectory.
