@@ -24,3 +24,6 @@ test_main.cpp
 test-driver
 
 bin
+mmap
+typetraits
+shm_cache

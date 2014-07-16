@@ -2,6 +2,7 @@ SUBDIRS = \
 		  map						\
 		  simd						\
 		  type_traits				\
+		  sha1						\
 		  shm_cache					\
 		  $(NULL)
 
