@@ -78,9 +78,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = typetraits$(EXEEXT)
-TESTS = typetraits$(EXEEXT)
-subdir = type_traits
+bin_PROGRAMS = shm_cache$(EXEEXT)
+TESTS = shm_cache$(EXEEXT)
+subdir = shm_cache
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/depcomp $(top_srcdir)/test-driver
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -93,9 +93,9 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_typetraits_OBJECTS = typetraits.$(OBJEXT)
-typetraits_OBJECTS = $(am_typetraits_OBJECTS)
-typetraits_LDADD = $(LDADD)
+am_shm_cache_OBJECTS = shm_cache.$(OBJEXT)
+shm_cache_OBJECTS = $(am_shm_cache_OBJECTS)
+shm_cache_DEPENDENCIES =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -125,8 +125,8 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(typetraits_SOURCES)
-DIST_SOURCES = $(typetraits_SOURCES)
+SOURCES = $(shm_cache_SOURCES)
+DIST_SOURCES = $(shm_cache_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -461,9 +461,11 @@ AM_CPPFLAGS = \
 			  -I$(top_srcdir)/common		\
 			  $(NULL)
 
-typetraits_SOURCES = \
-					 typetraits.cpp			\
-					 $(NULL)
+shm_cache_SOURCES = shm_cache.cpp
+shm_cache_LDADD = \
+				  -lpthread				\
+				  -lrt					\
+				  $(NULL)
 
 all: all-am
 
@@ -478,9 +480,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign type_traits/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign shm_cache/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign type_traits/Makefile
+	  $(AUTOMAKE) --foreign shm_cache/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -542,9 +544,9 @@ uninstall-binPROGRAMS:
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 
-typetraits$(EXEEXT): $(typetraits_OBJECTS) $(typetraits_DEPENDENCIES) $(EXTRA_typetraits_DEPENDENCIES) 
-	@rm -f typetraits$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(typetraits_OBJECTS) $(typetraits_LDADD) $(LIBS)
+shm_cache$(EXEEXT): $(shm_cache_OBJECTS) $(shm_cache_DEPENDENCIES) $(EXTRA_shm_cache_DEPENDENCIES) 
+	@rm -f shm_cache$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(shm_cache_OBJECTS) $(shm_cache_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -552,7 +554,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/typetraits.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/shm_cache.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -761,9 +763,9 @@ recheck: all
 	        am__force_recheck=am--force-recheck \
 	        TEST_LOGS="$$log_list"; \
 	exit $$?
-typetraits.log: typetraits$(EXEEXT)
-	@p='typetraits$(EXEEXT)'; \
-	b='typetraits'; \
+shm_cache.log: shm_cache$(EXEEXT)
+	@p='shm_cache$(EXEEXT)'; \
+	b='shm_cache'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

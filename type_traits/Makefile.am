@@ -1,5 +1,4 @@
 AM_CPPFLAGS = \
-			  -I$(srcdir)/..				\
 			  -I$(top_srcdir)/common		\
 			  $(NULL)
 

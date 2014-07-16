@@ -10,5 +10,6 @@ AC_CONFIG_FILES([
 				 simd/Makefile
 				 simd/unittest/Makefile
 				 type_traits/Makefile
+				 shm_cache/Makefile
 				 ])
 AC_OUTPUT

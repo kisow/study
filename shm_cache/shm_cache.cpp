@@ -1,5 +1,6 @@
-#include "xsi_shm_cache.hpp"
+#include "xsi_shm.hpp"
 #include "../sha1/sha1.hpp"
+#include <fstream>
 
 using namespace std;
 using namespace boost::interprocess;
@@ -19,6 +20,7 @@ ostream& operator<<(ostream& out, const Sha1& sha1)
 
 int main(int argc, char *argv[])
 {
+	ofstream out("test.log");
 	try {
 		xsi_key shmKey(argv[0], 1);
 
@@ -27,7 +29,7 @@ int main(int argc, char *argv[])
 		if(argc > 1) {
 			if((*argv[1]) == '1') {
 				SharedMemoryCache<Sha1>::destroy(shmKey);
-				PRINT << "remove " << argv[0] << endl;
+				out << "remove " << argv[0] << endl;
 				return 0;
 			} else {
 				c.printInfo();
@@ -40,7 +42,7 @@ int main(int argc, char *argv[])
 		fork();
 		fork();
 
-		PRINT << c.getFreeMemory() << endl;
+		out << c.getFreeMemory() << endl;
 
 		srand(getpid());
 		//Insert data in the map
@@ -50,15 +52,15 @@ int main(int argc, char *argv[])
 			std::string value;
 
 			if(c.get(key, value)) {
-				PRINT << "hit : [" << key << ']' << value << endl;
+				out << "hit : [" << key << ']' << value << endl;
 			} else {
 				value.assign(seed, 'v');
 				c.put(key, value);
-				PRINT << "miss : [" << key << ']' << value << endl;
+				out << "miss : [" << key << ']' << value << endl;
 			}
 		}
 	} catch (std::exception& ex) {
-		PRINT << ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; " << ex.what() << endl;
+		out << ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; " << ex.what() << endl;
 		return 1;
 	}
 

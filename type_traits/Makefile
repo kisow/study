@@ -458,7 +458,6 @@ top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
 AM_CPPFLAGS = \
-			  -I$(srcdir)/..				\
 			  -I$(top_srcdir)/common		\
 			  $(NULL)
 
