@@ -1,3 +1,3 @@
 #!/bin/env bash
 
-autoreconf --install
+autoreconf --install --force
