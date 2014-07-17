@@ -1,5 +1,8 @@
 AC_INIT([ps],[1.0],[kisow@naver.com])
+
+AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
+
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_INSTALL
@@ -41,5 +44,7 @@ AC_CONFIG_FILES([
 				 shm_cache/Makefile
 				 src/Makefile
 				 ])
+
+
 AC_OUTPUT
 

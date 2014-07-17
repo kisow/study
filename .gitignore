@@ -4,16 +4,11 @@ config.h.in
 config.h.in~
 config.log
 config.status
-config.guess
-config.sub
 configure
 configure.ac~
 configure.scan
-compile
-depcomp
-install-sh
-missing
-autom4te.cache
+build-aux/
+autom4te.cache/
 
 Makefile
 Makefile.in
@@ -35,7 +30,6 @@ stamp-h1
 *.trs
 *_test
 test_main.cpp
-test-driver
 
 bin
 mmap
