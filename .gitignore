@@ -14,8 +14,10 @@ missing
 autom4te.cache
 
 Makefile
+io/Makefile
 stamp-h1
 .deps
+.*
 *.o
 *.log
 *.trs

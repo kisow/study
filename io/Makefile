@@ -445,7 +445,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /home/kisow/study
+prefix = /usr/local
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
@@ -459,6 +459,10 @@ top_srcdir = ..
 o_direct_test_SOURCES = \
 					 o_direct_test.cpp			\
 					 $(NULL)
+
+EXTRA_DIST = \
+			 test.sh			\
+			 $(NULL)
 
 TESTS = test.sh
 all: all-am
