@@ -7,6 +7,8 @@ config.status
 config.guess
 config.sub
 configure
+configure.ac~
+configure.scan
 compile
 depcomp
 install-sh
@@ -14,12 +16,16 @@ missing
 autom4te.cache
 
 Makefile
-io/Makefile
-sha1/Makefile
-shm_cache/Makefile
-simd/Makefile
-simd/unittest/Makefile
-src/Makefile
+Makefile.in
+/io/Makefile
+/sha1/Makefile
+/shm_cache/Makefile
+/simd/Makefile
+/simd/unittest/Makefile
+/simd/unittest/g8iutable_2.txt
+/simd/unittest/g8iutable_4.txt
+/simd/unittest/g8iutable_8.txt
+/src/Makefile
 
 stamp-h1
 .deps
