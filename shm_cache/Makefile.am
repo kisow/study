@@ -4,7 +4,11 @@ AM_CPPFLAGS = \
 
 bin_PROGRAMS = shm_cache
 
-shm_cache_SOURCES = shm_cache.cpp
+shm_cache_SOURCES = \
+					shm_cache.cpp			\
+					xsi_shm.hpp				\
+					$(NULL)
+
 shm_cache_LDADD = \
 				  -lpthread				\
 				  -lrt					\

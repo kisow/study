@@ -15,6 +15,12 @@ autom4te.cache
 
 Makefile
 io/Makefile
+sha1/Makefile
+shm_cache/Makefile
+simd/Makefile
+simd/unittest/Makefile
+src/Makefile
+
 stamp-h1
 .deps
 .*

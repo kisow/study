@@ -8,3 +8,6 @@ EXTRA_DIST = \
 			 $(NULL)
 
 TESTS = test.sh
+CLEANFILES = \
+			 .data				\
+			 $(NULL)

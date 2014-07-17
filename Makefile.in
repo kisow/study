@@ -293,6 +293,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = \
+		  common					\
 		  io						\
 		  map						\
 		  simd						\

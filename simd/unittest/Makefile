@@ -123,6 +123,18 @@ AM_V_CXXLD = $(am__v_CXXLD_$(V))
 am__v_CXXLD_ = $(am__v_CXXLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+AM_V_CC = $(am__v_CC_$(V))
+am__v_CC_ = $(am__v_CC_$(AM_DEFAULT_VERBOSITY))
+am__v_CC_0 = @echo "  CC      " $@;
+am__v_CC_1 = 
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_CCLD = $(am__v_CCLD_$(V))
+am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
+am__v_CCLD_0 = @echo "  CCLD    " $@;
+am__v_CCLD_1 = 
 SOURCES = $(simd_test_SOURCES)
 DIST_SOURCES = $(simd_test_SOURCES)
 am__can_run_installinfo = \
@@ -464,11 +476,19 @@ simd_test_SOURCES = \
 					test_varint.cpp			\
 					test_x86simd.cpp		\
 					test_main.cpp			\
+					../varint.hpp			\
+					../x86simd.hpp			\
 					$(NULL)
 
 simd_test_LDADD = \
 				  -lcppunit					\
 				  $(NULL)
+
+CLEANFILES = \
+			 g8iutable_2.txt		\
+			 g8iutable_4.txt		\
+			 g8iutable_8.txt		\
+			 $(NULL)
 
 all: all-am
 
@@ -812,6 +832,7 @@ mostlyclean-generic:
 	-test -z "$(TEST_SUITE_LOG)" || rm -f $(TEST_SUITE_LOG)
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)

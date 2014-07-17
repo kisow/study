@@ -1,4 +1,5 @@
 SUBDIRS = \
+		  common					\
 		  io						\
 		  map						\
 		  simd						\

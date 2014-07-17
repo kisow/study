@@ -20,7 +20,6 @@ ostream& operator<<(ostream& out, const Sha1& sha1)
 
 int main(int argc, char *argv[])
 {
-	ofstream out("test.log");
 	try {
 		xsi_key shmKey(argv[0], 1);
 
@@ -29,7 +28,7 @@ int main(int argc, char *argv[])
 		if(argc > 1) {
 			if((*argv[1]) == '1') {
 				SharedMemoryCache<Sha1>::destroy(shmKey);
-				out << "remove " << argv[0] << endl;
+				PRINT << "remove " << argv[0] << endl;
 				return 0;
 			} else {
 				c.printInfo();
@@ -42,7 +41,7 @@ int main(int argc, char *argv[])
 		fork();
 		fork();
 
-		out << c.getFreeMemory() << endl;
+		PRINT << c.getFreeMemory() << endl;
 
 		srand(getpid());
 		//Insert data in the map
@@ -52,15 +51,15 @@ int main(int argc, char *argv[])
 			std::string value;
 
 			if(c.get(key, value)) {
-				out << "hit : [" << key << ']' << value << endl;
+				PRINT << "hit : [" << key << ']' << value << endl;
 			} else {
 				value.assign(seed, 'v');
 				c.put(key, value);
-				out << "miss : [" << key << ']' << value << endl;
+				PRINT << "miss : [" << key << ']' << value << endl;
 			}
 		}
 	} catch (std::exception& ex) {
-		out << ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; " << ex.what() << endl;
+		PRINT << ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; " << ex.what() << endl;
 		return 1;
 	}
 

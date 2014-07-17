@@ -6,6 +6,7 @@ bin_PROGRAMS = run_test
 run_test_SOURCES = \
 					test_argstring.cpp		\
 					test_main.cpp			\
+					cubs_string.hpp			\
 					$(NULL)
 
 run_test_LDADD = \

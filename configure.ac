@@ -6,6 +6,7 @@ AX_PTHREAD
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
 				 Makefile
+				 common/Makefile
 				 io/Makefile
 				 map/Makefile
 				 simd/Makefile
