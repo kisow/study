@@ -5,5 +5,6 @@ SUBDIRS = \
 		  type_traits				\
 		  sha1						\
 		  shm_cache					\
+		  src						\
 		  $(NULL)
 

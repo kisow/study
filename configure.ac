@@ -13,5 +13,6 @@ AC_CONFIG_FILES([
 				 type_traits/Makefile
 				 sha1/Makefile
 				 shm_cache/Makefile
+				 src/Makefile
 				 ])
 AC_OUTPUT
