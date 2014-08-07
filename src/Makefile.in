@@ -94,7 +94,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_run_test_OBJECTS = test_argstring.$(OBJEXT) test_main.$(OBJEXT)
+am_run_test_OBJECTS = test_argstring.$(OBJEXT) test_bgl.$(OBJEXT) \
+	test_main.$(OBJEXT)
 run_test_OBJECTS = $(am_run_test_OBJECTS)
 run_test_DEPENDENCIES =
 AM_V_P = $(am__v_P_@AM_V@)
@@ -480,6 +481,7 @@ AM_CPPFLAGS = \
 
 run_test_SOURCES = \
 					test_argstring.cpp		\
+					test_bgl.cpp			\
 					test_main.cpp			\
 					cubs_string.hpp			\
 					$(NULL)
@@ -576,6 +578,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_argstring.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_bgl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_main.Po@am__quote@
 
 .cpp.o:
@@ -969,6 +972,9 @@ test_main.cpp: $(top_srcdir)/common/com_test_main.cpp
 
 clean-local:
 	rm -f test_main.cpp
+
+all: run_test 
+	./run_test BglTest
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
