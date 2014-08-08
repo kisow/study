@@ -40,7 +40,21 @@ void build_router_network(
 template <typename VertexDescriptor, typename VertexNameMap>
 void print_vertex_name(VertexDescriptor v, VertexNameMap& name_map)
 {
-	cout << get(name_map, v);
+	cout << name_map[v];
+}
+
+template <typename Graph, typename TransDelayMap, typename VertexNameMap>
+void print_trans_delay(
+		typename graph_traits<Graph>::edge_descriptor e
+		, const Graph& g
+		, TransDelayMap& delay_map
+		, VertexNameMap& name_map
+		)
+{
+	cout << "trans-delay(";
+	cout << name_map[source(e, g)] << ",";
+	cout << name_map[target(e, g)] << ") = ";
+	cout << delay_map[e];
 }
 
 class BglTest : public CppUnit::TestFixture
@@ -59,8 +73,15 @@ public:
 		map<graph_traits<Graph>::edge_descriptor, double> delay_map;
 
 		build_router_network(g, name_map, delay_map);
+		cout << endl;
 		for(auto p = vertices(g); p.first != p.second; ++p.first) {
 			print_vertex_name(*p.first, name_map);
+			cout << endl;
+		}
+		cout << endl;
+		for(auto p = edges(g); p.first != p.second; ++p.first) {
+			print_trans_delay(*p.first, g, delay_map, name_map);
+			cout << endl;
 		}
 
 	}/*}}}*/
