@@ -1,6 +1,8 @@
 #include <array>
 #include <cstdint>
 #include <algorithm>
+#include <sstream>
+#include <iomanip>
 
 #define SCHEDULE(i)  \
 	temp = schedule[(i-3)&0xF]	\
@@ -49,6 +51,16 @@ struct Sha1 : public std::array<uint32_t, 5>
 	Sha1(const char* ptr, uint32_t length)
 	{
 		hash((const uint8_t*)ptr, length, data());
+	}
+
+	std::string str() const
+	{
+		std::stringstream out;
+		for(auto x : *this) {
+			out << std::setw(8) << std::setfill('0') << std::hex << x;
+		}
+
+		return out.str();
 	}
 
 	static void compress(uint32_t state[5], uint32_t block[5]) /*{{{*/

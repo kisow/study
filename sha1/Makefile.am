@@ -5,3 +5,6 @@ sha1_test_SOURCES = \
 					 $(NULL)
 
 TESTS = sha1_test
+
+all:
+	./sha1_test

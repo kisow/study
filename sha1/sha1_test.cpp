@@ -13,7 +13,7 @@
 
 using namespace std;
 
-static inline int self_check() /*{{{*/
+static int self_check() /*{{{*/
 {
 	ifstream msg("vectors/byte-messages.sha1");
 	ifstream hash("vectors/byte-hashes.sha1");
@@ -60,6 +60,9 @@ static inline int self_check() /*{{{*/
 		}
 	} while(1);
 
+	Sha1 sha("1111", 4);
+	printf("%08X%08X%08X%08X%08X\n", sha[0], sha[1], sha[2], sha[3], sha[4]);
+	cout << sha.str() << endl;
 	cout << sizeof(Sha1) << endl;
 
 	return 1;

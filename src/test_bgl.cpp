@@ -128,7 +128,7 @@ public:
 			, "eat dinner"
 		};
 		const int n_tasks = sizeof(tasks) / sizeof(tasks[0]);
-#if 1
+#if 0
 		vector<list<int>> g(n_tasks);
 
 		g[0].push_back(3);
