@@ -42,6 +42,7 @@ AC_CONFIG_FILES([
 				 type_traits/Makefile
 				 sha1/Makefile
 				 shm_cache/Makefile
+				 asio/Makefile
 				 src/Makefile
 				 ])
 
