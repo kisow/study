@@ -12,15 +12,9 @@ autom4te.cache/
 
 Makefile
 Makefile.in
-/io/Makefile
-/sha1/Makefile
-/shm_cache/Makefile
-/simd/Makefile
-/simd/unittest/Makefile
-/simd/unittest/g8iutable_2.txt
-/simd/unittest/g8iutable_4.txt
-/simd/unittest/g8iutable_8.txt
-/src/Makefile
+simd/unittest/g8iutable_2.txt
+simd/unittest/g8iutable_4.txt
+simd/unittest/g8iutable_8.txt
 
 stamp-h1
 .deps

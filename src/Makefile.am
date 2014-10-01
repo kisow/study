@@ -23,4 +23,3 @@ clean-local:
 	rm -f test_main.cpp
 
 all: run_test 
-	./run_test BglTest

@@ -6,5 +6,7 @@ sha1_test_SOURCES = \
 
 TESTS = sha1_test
 
-all:
+all: sha1_test
+
+test: all
 	./sha1_test
