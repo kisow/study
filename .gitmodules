@@ -1,0 +1,6 @@
+[submodule "testa/testa"]
+	path = testa/testa
+	url = git@github.com:kisow/testa.git
+[submodule "testa"]
+	path = testa
+	url = git@github.com:kisow/testa.git
