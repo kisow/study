@@ -2,7 +2,15 @@ AM_CPPFLAGS = \
 			  -I$(top_srcdir)/common		\
 			  $(NULL)
 
-bin_PROGRAMS = run_test
+
+bin_PROGRAMS = \
+			   run_emcpp35_1				\
+			   run_test						\
+			   $(NULL)
+
+run_emcpp35_1_SOURCES = emcpp35_1.cpp
+run_emcpp35_1_LDADD = $(DEPLIBS)
+
 run_test_SOURCES = \
 					test_argstring.cpp		\
 					test_bgl.cpp			\
