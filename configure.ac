@@ -2,13 +2,14 @@ AC_INIT([ps],[1.0],[kisow@naver.com])
 
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
+AC_CONFIG_MACRO_DIR([m4])
 
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
-AX_CXX_COMPILE_STDCXX_11
+AX_CXX_COMPILE_STDCXX_14
 AX_PTHREAD
 
 AC_CHECK_LIB([cppunit], [main])
