@@ -1,8 +1,6 @@
 #ifndef CUBS_STRING_HPP__
 #define CUBS_STRING_HPP__
 
-// author : kisow@nhn.com
-
 #include <string>
 #include <sstream>
 #include <iostream>
